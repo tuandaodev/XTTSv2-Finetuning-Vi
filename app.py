@@ -35,7 +35,7 @@ def clear_gpu_cache():
         torch.cuda.empty_cache()
 
 
-def load_model(checkpoint_dir="model/", repo_id="capleaf/viXTTS", use_deepspeed=False):
+def load_model(checkpoint_dir="model/", repo_id="tuandaodev/xtts-vi-vinai-100h-custom-dvae", use_deepspeed=False):
     global XTTS_MODEL
     clear_gpu_cache()
     os.makedirs(checkpoint_dir, exist_ok=True)
@@ -122,8 +122,6 @@ def normalize_vietnamese_text(text):
         .replace(" ,", ",")
         .replace('"', "")
         .replace("'", "")
-        .replace("AI", "Ây Ai")
-        .replace("A.I", "Ây Ai")
     )
     return text
 
@@ -281,7 +279,7 @@ def read_logs():
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="""viXTTS inference demo\n\n""",
+        description="""XTTS VI inference demo\n\n""",
         formatter_class=argparse.RawTextHelpFormatter,
     )
     parser.add_argument(
@@ -309,24 +307,23 @@ if __name__ == "__main__":
     if args.model_dir:
         MODEL_DIR = os.path.abspath(args.model_dir)
 
-    REFERENCE_AUDIO = os.path.join(SCRIPT_DIR, "assets", "vixtts_sample_female.wav")
+    REFERENCE_AUDIO = os.path.join(SCRIPT_DIR, "assets", "vi-man_kien-thuc-quan-su.wav")
     if args.reference_audio:
         REFERENCE_AUDIO = os.abspath(args.reference_audio)
 
     with gr.Blocks() as demo:
         intro = """
-        # viXTTS Inference Demo
-        Visit viXTTS on HuggingFace: [viXTTS](https://huggingface.co/capleaf/viXTTS)
+        # XTTS VI Inference Demo
         """
         gr.Markdown(intro)
         with gr.Row():
             with gr.Column() as col1:
                 repo_id = gr.Textbox(
                     label="HuggingFace Repo ID",
-                    value="capleaf/viXTTS",
+                    value="tuandaodev/xtts-vi-vinai-100h-custom-dvae",
                 )
                 checkpoint_dir = gr.Textbox(
-                    label="viXTTS model directory",
+                    label="XTTS VI model directory",
                     value=MODEL_DIR,
                 )
 
@@ -336,7 +333,7 @@ if __name__ == "__main__":
 
                 progress_load = gr.Label(label="Progress:")
                 load_btn = gr.Button(
-                    value="Step 1 - Load viXTTS model", variant="primary"
+                    value="Step 1 - Load XTTS VI model", variant="primary"
                 )
 
             with gr.Column() as col2:
@@ -382,7 +379,7 @@ if __name__ == "__main__":
 
                 tts_text = gr.Textbox(
                     label="Input Text.",
-                    value="Xin chào, tôi là một công cụ chuyển đổi văn bản thành giọng nói tiếng Việt được phát triển bởi nhóm Nón lá.",
+                    value="Xin chào, tôi là một công cụ chuyển đổi văn bản thành giọng nói tiếng Việt được huấn luyện trong môn học xử lý giọng nói.",
                 )
                 tts_btn = gr.Button(value="Step 2 - Inference", variant="primary")
 
