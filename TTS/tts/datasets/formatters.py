@@ -52,18 +52,18 @@ def cml_tts(root_path, meta_file, ignored_speakers=None):
     return items
 
 
-def coqui(root_path, meta_file, ignored_speakers=None):
+def coqui(root_path, meta_file, ignored_speakers=None, delimiter="|"):
     """Interal dataset formatter."""
     filepath = os.path.join(root_path, meta_file)
     # ensure there are 4 columns for every line
     with open(filepath, "r", encoding="utf8") as f:
         lines = f.readlines()
-    num_cols = len(lines[0].split("|"))  # take the first row as reference
+    num_cols = len(lines[0].split(delimiter))  # take the first row as reference
     for idx, line in enumerate(lines[1:]):
-        if len(line.split("|")) != num_cols:
+        if len(line.split(delimiter)) != num_cols:
             print(f" > Missing column in line {idx + 1} -> {line.strip()}")
     # load metadata
-    metadata = pd.read_csv(os.path.join(root_path, meta_file), sep="|")
+    metadata = pd.read_csv(os.path.join(root_path, meta_file), sep=delimiter)
     assert all(x in metadata.columns for x in ["audio_file", "text"])
     speaker_name = None if "speaker_name" in metadata.columns else "coqui"
     emotion_name = None if "emotion_name" in metadata.columns else "neutral"
