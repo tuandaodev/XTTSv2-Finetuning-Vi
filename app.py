@@ -380,7 +380,7 @@ if __name__ == "__main__":
 
                 tts_text = gr.Textbox(
                     label="Input Text.",
-                    value="Xin chào, tôi là một công cụ chuyển đổi văn bản thành giọng nói tiếng Việt được huấn luyện trong môn học xử lý giọng nói.",
+                    value="Xin chào, tôi là một công cụ chuyển đổi văn bản thành giọng nói tiếng Việt, được huấn luyện trong môn học xử lý giọng nói.",
                 )
                 tts_btn = gr.Button(value="Step 2 - Inference", variant="primary")
 
