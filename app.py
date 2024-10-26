@@ -113,8 +113,6 @@ def get_file_name(text, max_char=50):
 
 
 def normalize_vietnamese_text(text):
-    text = text.encode('ascii', 'ignore').decode('ascii')
-    text = text.encode('utf-8', 'ignore').decode('utf-8')
     text = (
         TTSnorm(text, unknown=False, lower=False, rule=True)
         .replace("..", ".")
