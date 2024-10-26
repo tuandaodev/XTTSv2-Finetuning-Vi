@@ -51,9 +51,32 @@ def cml_tts(root_path, meta_file, ignored_speakers=None):
         print(f" | > [!] {not_found_counter} files not found")
     return items
 
+def guess_delimiter(file_path, num_lines=5):
+    with open(file_path, mode='r', newline='', encoding='utf-8') as csvfile:
+        # Read the specified number of lines
+        sample_lines = [next(csvfile) for _ in range(num_lines)]
+    
+    # Join the sample lines into a single string
+    sample_data = ''.join(sample_lines)
+    
+    # Count occurrences of each delimiter
+    comma_count = sample_data.count(',')
+    pipe_count = sample_data.count('|')
+    
+    # Determine the delimiter used
+    if comma_count > pipe_count:
+        return ','
+    elif pipe_count > comma_count:
+        return '|'
+    else:
+        return None  # Uncertain
 
-def coqui(root_path, meta_file, ignored_speakers=None, delimiter="|"):
+def coqui(root_path, meta_file, ignored_speakers=None):
     """Interal dataset formatter."""
+    delimiter = guess_delimiter(os.path.join(root_path, meta_file))
+    if delimiter is None:
+        delimiter = '|'
+
     filepath = os.path.join(root_path, meta_file)
     # ensure there are 4 columns for every line
     with open(filepath, "r", encoding="utf8") as f:
